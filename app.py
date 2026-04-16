@@ -256,6 +256,7 @@ html = f"""
     overflow: hidden;
     min-height: 280px;
     width: 100%;
+    -webkit-overflow-scrolling: touch;
   }}
   #map {{ width: 100%; height: 100%; min-height: 280px; }}
 
@@ -378,7 +379,11 @@ html = f"""
 
 <script>
   // ── Map ──────────────────────────────────────────────────────────────────
-  const map = L.map('map').setView([{current['lat']}, {current['lon']}], 10);
+  const map = L.map('map', {{
+    center: [{current['lat']}, {current['lon']}],
+    zoom: 10,
+    tap: true
+  }});
   
   // Base map
   L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
@@ -402,6 +407,9 @@ html = f"""
   // Marker
   L.marker([{current['lat']}, {current['lon']}]).addTo(map)
     .bindPopup("{current['city']}").openPopup();
+  
+  // Force map invalidation for mobile
+  setTimeout(() => map.invalidateSize(), 100);
 
   // ── Chart defaults ───────────────────────────────────────────────────────
   Chart.defaults.color = '#8b949e';
