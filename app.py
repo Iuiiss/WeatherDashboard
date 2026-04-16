@@ -113,6 +113,7 @@ html = f"""
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -263,11 +264,16 @@ html = f"""
     color: var(--text);
   }}
 
-  @media (max-width: 768px) {{
-    .today-row {{ grid-template-columns: 1fr; grid-template-rows: auto; }}
-    .map-card {{ grid-row: span 1; }}
-    .weekly-row {{ grid-template-columns: 1fr; }}
-  }}
+  @media (max-width: 1024px) {
+    .today-row { grid-template-columns: 1fr; }
+    .weekly-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .today-row { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .map-card { grid-row: span 1; }
+    .weekly-row { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
