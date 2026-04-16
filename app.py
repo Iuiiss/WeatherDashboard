@@ -172,7 +172,7 @@ html = f"""
   /* ── Today overview row ── */
   .today-row {{
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr;
     gap: 16px;
     margin-bottom: 32px;
   }}
@@ -274,9 +274,26 @@ html = f"""
   }}
 
   @media (max-width: 768px) {{
-    .today-row {{ grid-template-columns: 1fr; grid-template-rows: auto; }}
+    body {{ 
+      padding: 16px; 
+      padding-bottom: 40px; 
+      padding-left: env(safe-area-inset-left, 16px);
+      padding-right: env(safe-area-inset-right, 16px);
+      padding-top: env(safe-area-inset-top, 16px);
+      min-height: -webkit-fill-available; 
+    }}
+    .topbar {{ margin-bottom: 16px; }}
+    .brand-title {{ font-size: 1.2rem; }}
+    .today-row {{ grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; margin-bottom: 24px; }}
     .map-card {{ grid-row: span 1; }}
-    .weekly-row {{ grid-template-columns: 1fr; }}
+    .weekly-row {{ grid-template-columns: 1fr; gap: 12px; }}
+    .current-card, .map-card, .chart-card {{ padding: 16px; }}
+    .section-title {{ font-size: 1.2rem; margin-bottom: 12px; }}
+    .metric-val {{ font-size: 1.4rem; }}
+    .metrics {{ gap: 16px; margin-bottom: 16px; }}
+    .hourly-strip {{ gap: 6px; }}
+    .hour-card {{ min-width: 50px; padding: 6px 8px; }}
+    .chart-title {{ font-size: 0.9rem; margin-bottom: 12px; }}
   }}
 </style>
 </head>
@@ -431,4 +448,4 @@ html = f"""
 """
 
 # ── Render inside Streamlit ───────────────────────────────────────────────────
-components.html(html, height=900, scrolling=True)
+components.html(html, height=1200, scrolling=True)
