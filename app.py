@@ -382,34 +382,53 @@ html = f"""
   const map = L.map('map', {{
     center: [{current['lat']}, {current['lon']}],
     zoom: 10,
-    tap: true
+    zoomControl: false
   }});
   
+  // Add zoom control to top-right
+  L.control.zoom({{position: 'topright'}}).addTo(map);
+  
   // Base map
-  L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+  const baseLayer = L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
     attribution: '© OpenStreetMap contributors',
     maxZoom: 18
   }}).addTo(map);
   
-  // Temperature layer (hidden by default)
+  // Temperature layer
   const tempLayer = L.tileLayer('https://tile.openweathermap.org/map/temp_new/{{z}}/{{x}}/{{y}}.png?appid={OPENWEATHER_API_KEY}', {{
     attribution: '© OpenWeatherMap',
-    opacity: 0.6,
+    opacity: 0.7,
     maxZoom: 18
   }});
   
-  // Layer control
-  L.control.layers({{
-    'Standard': L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png'),
-    'Temperature': tempLayer
-  }}).addTo(map);
+  // Custom temperature toggle button
+  const tempBtn = L.control({{position: 'topright'}});
+  tempBtn.onAdd = function() {{
+    const div = L.DomUtil.create('div', 'temp-toggle');
+    div.innerHTML = '<button id="tempToggle" style="background:#161b22;color:#e6edf3;border:1px solid #30363d;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;">🌡️ Temperature</button>';
+    return div;
+  }};
+  tempBtn.addTo(map);
+  
+  let tempActive = false;
+  document.getElementById('tempToggle').addEventListener('click', function() {{
+    tempActive = !tempActive;
+    if (tempActive) {{
+      tempLayer.addTo(map);
+      this.style.borderColor = '#58a6ff';
+    }} else {{
+      map.removeLayer(tempLayer);
+      this.style.borderColor = '#30363d';
+    }}
+  }});
   
   // Marker
   L.marker([{current['lat']}, {current['lon']}]).addTo(map)
     .bindPopup("{current['city']}").openPopup();
   
-  // Force map invalidation for mobile
+  // Fix for mobile
   setTimeout(() => map.invalidateSize(), 100);
+  window.addEventListener('resize', () => map.invalidateSize());
 
   // ── Chart defaults ───────────────────────────────────────────────────────
   Chart.defaults.color = '#8b949e';
