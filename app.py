@@ -138,6 +138,10 @@ html = f"""
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     padding: 24px;
+    padding-left: env(safe-area-inset-left, 24px);
+    padding-right: env(safe-area-inset-right, 24px);
+    padding-top: env(safe-area-inset-top, 24px);
+    padding-bottom: env(safe-area-inset-bottom, 24px);
   }}
 
   /* ── Top bar ── */
@@ -264,16 +268,16 @@ html = f"""
     color: var(--text);
   }}
 
-  @media (max-width: 1024px) {
-    .today-row { grid-template-columns: 1fr; }
-    .weekly-row { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 1024px) {{
+    .today-row {{ grid-template-columns: 1fr; }}
+    .weekly-row {{ grid-template-columns: 1fr; }}
+  }}
 
-  @media (max-width: 768px) {
-    .today-row { grid-template-columns: 1fr; grid-template-rows: auto; }
-    .map-card { grid-row: span 1; }
-    .weekly-row { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 768px) {{
+    .today-row {{ grid-template-columns: 1fr; grid-template-rows: auto; }}
+    .map-card {{ grid-row: span 1; }}
+    .weekly-row {{ grid-template-columns: 1fr; }}
+  }}
 </style>
 </head>
 <body>
