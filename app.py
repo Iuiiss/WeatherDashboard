@@ -298,7 +298,7 @@ html = f"""
     .brand-title {{ font-size: 1.2rem; }}
     .today-row {{ grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; margin-bottom: 24px; }}
     .map-card {{ grid-row: span 1; }}
-    .weekly-row {{ grid-template-columns: 1fr 1fr; gap: 12px; }}
+    .weekly-row {{ grid-template-columns: 1fr; gap: 12px; }}
     .current-card, .map-card, .chart-card {{ padding: 16px; }}
     .section-title {{ font-size: 1.2rem; margin-bottom: 12px; }}
     .metric-val {{ font-size: 1.4rem; }}
