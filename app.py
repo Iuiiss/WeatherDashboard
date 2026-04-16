@@ -3,7 +3,12 @@ import streamlit.components.v1 as components
 import json
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from dotenv import load_dotenv
+import os
 from weather import get_all_weather
+
+load_dotenv()
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY", "")
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Earth Flow", page_icon="🌍", layout="wide")
@@ -142,6 +147,9 @@ html = f"""
     padding-right: env(safe-area-inset-right, 24px);
     padding-top: env(safe-area-inset-top, 24px);
     padding-bottom: env(safe-area-inset-bottom, 24px);
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: hidden;
   }}
 
   /* ── Top bar ── */
@@ -184,6 +192,8 @@ html = f"""
     border-radius: 16px;
     padding: 24px;
     min-height: 280px;
+    width: 100%;
+    overflow: hidden;
   }}
   .current-top {{
     display: flex;
@@ -245,6 +255,7 @@ html = f"""
     border-radius: 16px;
     overflow: hidden;
     min-height: 280px;
+    width: 100%;
   }}
   #map {{ width: 100%; height: 100%; min-height: 280px; }}
 
@@ -311,7 +322,7 @@ html = f"""
 </div>
 
 <!-- ── Today Overviews ── -->
-<div class="section-title">Today OverViews</div>
+<div class="section-title">Today's Overview</div>
 <div class="today-row">
 
   <!-- Current weather + hourly strip -->
@@ -349,8 +360,8 @@ html = f"""
 
 </div>
 
-<!-- ── Weekly Overviews ── -->
-<div class="section-title">Weekly OverViews</div>
+<!-- ── Weekly Overview ── -->
+<div class="section-title">Weekly Overview</div>
 <div class="weekly-row">
 
   <div class="chart-card">
@@ -367,10 +378,28 @@ html = f"""
 
 <script>
   // ── Map ──────────────────────────────────────────────────────────────────
-  const map = L.map('map').setView([{current['lat']}, {current['lon']}], 11);
+  const map = L.map('map').setView([{current['lat']}, {current['lon']}], 10);
+  
+  // Base map
   L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-    attribution: 'Map data © OpenStreetMap contributors'
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 18
   }}).addTo(map);
+  
+  // Temperature layer (hidden by default)
+  const tempLayer = L.tileLayer('https://tile.openweathermap.org/map/temp_new/{{z}}/{{x}}/{{y}}.png?appid={OPENWEATHER_API_KEY}', {{
+    attribution: '© OpenWeatherMap',
+    opacity: 0.6,
+    maxZoom: 18
+  }});
+  
+  // Layer control
+  L.control.layers({{
+    'Standard': L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png'),
+    'Temperature': tempLayer
+  }}).addTo(map);
+  
+  // Marker
   L.marker([{current['lat']}, {current['lon']}]).addTo(map)
     .bindPopup("{current['city']}").openPopup();
 
